@@ -28,48 +28,22 @@ Node* buildTree(vector<int> nodes) {
 }
 
 
-bool rootToNodePath(Node* root, int n, vector<int>&path) {
-	if(root == NULL)
-	{
-		return false;
+Node* LCA2(Node* root, int n1, int n2) { // TC = O(n) SC = O(1)
+	if(root == NULL) {
+		return NULL;
 	}
 	
-	path.push_back(root->data);
-	if(root->data == n) {
-		return true;
+	if(root->data == n1 || root->data == n2) {
+		return root;
 	}
 	
-  int isLeft  = rootToNodePath(root->left, n, path);
-  int isRight = rootToNodePath(root->right, n, path);
-  
-  if(isLeft || isRight) {
-  	return true;
-  }
-  
-  path.pop_back();
-  return false;
+	Node* leftLCA = LCA2(root->left, n1, n2);
+	Node* rightLCA = LCA2(root->right, n1, n2);
 	
-}
-
-int LCA(Node* root, int n1, int n2) {
-	vector<int> path1;
-	vector<int> path2;
-	
-	
-	rootToNodePath(root, n1, path1);
-	rootToNodePath(root, n2, path2);
-	
-	int lca = -1;
-	
-	for(int i =0 , j = 0; i<path1.size() && j<path2.size(); i++,j++) {
-		if(path1[i] != path2[j]) {
-			return lca;
-		}
-		
-		lca = path1[i];
+	if(leftLCA != NULL && rightLCA != NULL) {
+		return root;
 	}
-	
-	return lca;
+	return leftLCA == NULL ? rightLCA : leftLCA;
 }
 
 int main()
@@ -78,7 +52,7 @@ int main()
 	Node* root = buildTree(nodes);
 	
     int n1 = 4, n2 = 3; //lca = 1
-    cout<< "lca = " << LCA(root, n1, n2) << endl;
+    cout<< "lca = " << LCA2(root, n1, n2)->data << endl;
 	
 	
 	return 0;
