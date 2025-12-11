@@ -2,7 +2,6 @@
 #include<vector>
 #include<queue>
 using namespace std;
-
 void slidingWindowMax(vector<int> arr, int K) {
 	priority_queue<pair<int, int>> pq;
 	
@@ -24,17 +23,10 @@ void slidingWindowMax(vector<int> arr, int K) {
 	}
 	cout<< endl;
 }
-
 int main()
 {
 	vector<int> arr = {1, 3, -1, -3, 5, 3, 6, 7};
 	int K = 3;
-	
-	
 	slidingWindowMax(arr, K);
-	
-	
-	
-	
-	return 0;
+    return 0;
 }
