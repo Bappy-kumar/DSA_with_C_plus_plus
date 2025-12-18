@@ -28,6 +28,7 @@ class Trie {
 			}
 			temp->endOfWord = true;
 		}
+		
 		bool search(string key) {
 			Node* temp = root;
 			
@@ -41,35 +42,44 @@ class Trie {
 			
 			return temp->endOfWord;
 		}
-};
-bool helper(Trie &trie, string key) {
-	  if(key.size() == 0) {
-	  	return true;
-	  }
-	for(int i = 0; i<key.size(); i++) {
-		string first = key.substr(0, i+1);
-		string second = key.substr(i+1);
 		
-		if(trie.search(first) && helper(trie, second)) {
-			return true;
+		int countHelper(Node* root) {
+			int ans = 0;
+			
+			for(pair<char, Node*> child : root->children) {
+				ans += countHelper(child.second);
+			}
+			
+			return ans + 1;
 		}
-	}
-	return false;
-}
-bool wordBreak(vector<string> dict, string key) {
+		
+		
+		int countNodes()
+		{
+			return countHelper(root);
+		}
+};
+
+
+int countUniqueSubstr(string str) {
 	Trie trie;
-	
-	for(int i = 0; i<dict.size(); i++) {
-		trie.insert(dict[i]);
+	//find suffix
+	for(int i = 0; i<str.size(); i++)
+	{
+		string suffix = str.substr(i);
+		trie.insert(suffix);
 	}
 	
-	return helper(trie, key);
+	return trie.countNodes();
 }
+
 int main()
 {
-	vector<string> dict = {"i", "like", "sam", "samsung", "mobile", "ice"};
-	cout<< wordBreak(dict, "ilikesam")<< endl;
+//	string str = "ababa";
+	string str = "abc";
 
+	
+	cout<< countUniqueSubstr(str) << endl;
 	
 	return 0;
 }

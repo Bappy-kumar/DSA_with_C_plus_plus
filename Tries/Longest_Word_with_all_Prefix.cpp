@@ -28,6 +28,7 @@ class Trie {
 			}
 			temp->endOfWord = true;
 		}
+		
 		bool search(string key) {
 			Node* temp = root;
 			
@@ -41,35 +42,46 @@ class Trie {
 			
 			return temp->endOfWord;
 		}
-};
-bool helper(Trie &trie, string key) {
-	  if(key.size() == 0) {
-	  	return true;
-	  }
-	for(int i = 0; i<key.size(); i++) {
-		string first = key.substr(0, i+1);
-		string second = key.substr(i+1);
 		
-		if(trie.search(first) && helper(trie, second)) {
-			return true;
+		void longestHelper(Node* root, string &ans, string temp)
+		{
+			for(pair<char, Node*> child : root->children) {
+			if(child.second->endOfWord) {
+					temp += child.first;
+				
+				if((temp.size() == ans.size() && temp < ans) || (temp.size() > ans.size())) {
+					ans = temp;
+				}
+				
+				longestHelper(child.second, ans, temp);
+				temp = temp.substr(0, temp.size()-1);
+			}
+			}
 		}
-	}
-	return false;
-}
-bool wordBreak(vector<string> dict, string key) {
+		
+		string longestStringWithEOW() {
+			string ans = "";
+			longestHelper(root, ans, "");
+			return ans;
+		}
+};
+
+string longestString(vector<string> dict) {
 	Trie trie;
 	
 	for(int i = 0; i<dict.size(); i++) {
 		trie.insert(dict[i]);
 	}
 	
-	return helper(trie, key);
+	return trie.longestStringWithEOW();
 }
+
+
 int main()
 {
-	vector<string> dict = {"i", "like", "sam", "samsung", "mobile", "ice"};
-	cout<< wordBreak(dict, "ilikesam")<< endl;
-
+	vector<string> dict = {"a", "banana", "app", "appl","ap", "apply", "apple"};
+	
+	cout<<longestString(dict)<< endl;
 	
 	return 0;
 }
