@@ -26,17 +26,39 @@ class Graph {
 				   }
 				   cout<< endl;
 			   }
-		   }          
+		   }
+		   
+		   void dfsHelper(int u, vector<bool> &vis) { // O(V + E)
+		   	vis[u] = true;
+		   	cout<< u << " ";
+		   	
+		   	list<int> neighbors = l[u];
+		   	for(int v : neighbors) {
+		   		if(!vis[v]) {
+		   			dfsHelper(v,vis);
+				   }
+			   }
+		   	
+		   }   
+		   
+		   void dfs() {
+		   	vector<bool> vis(7, false);
+		   	dfsHelper(0, vis);
+		   	cout<< endl;
+		   }       
 };
 int main()
 {
-	Graph graph(5);
+	Graph graph(7);
 	graph.addEdge(0, 1);
-	graph.addEdge(1, 2);
+	graph.addEdge(0, 2);
 	graph.addEdge(1, 3);
-	graph.addEdge(2, 3);
 	graph.addEdge(2, 4);
-    graph.print();
+	graph.addEdge(3, 4);
+	graph.addEdge(4, 5);
+	graph.addEdge(5, 6);
 	
+	
+	graph.dfs();
 	return 0;
 }
