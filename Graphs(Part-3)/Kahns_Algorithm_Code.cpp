@@ -52,7 +52,43 @@ class Graph {
 			cout<< endl;
 		}
 		
+		void calcIndegree(vector<int> &indeg) {
+			for(int u = 0; u<V; u++)
+			{
+				list<int> neighbors = l[u];
+				for(int v : neighbors) { //u ----> v
+					indeg[v]++;
+				}
+			}
+		}
 		
+		void topoSort2() { //kahn's algo
+			vector<int> indeg(V, 0);
+			calcIndegree(indeg);
+			queue<int> q;
+			//0 indeg nodes -> starting point
+			for(int i = 0; i<V; i++)
+			{
+				if(indeg[i] == 0) {
+					q.push(i);
+				}
+			}
+			while(q.size()> 0) {
+				int curr = q.front();
+				q.pop();
+				cout<< curr << " ";
+				
+				list<int> neighbors = l[curr];
+				for(int v : neighbors) {
+					indeg[v]--;
+					if(indeg[v] == 0) { //no pending dependencies
+						q.push(v);
+					}
+				}
+			}
+			
+			cout<< endl;
+		}
 };
 int main() {
 	//DAG
@@ -66,7 +102,7 @@ int main() {
 	graph.addEdge(5,0);
 	graph.addEdge(5,2);
 	
-	graph.topoSort();
+	graph.topoSort2();
 	
 	
 }
